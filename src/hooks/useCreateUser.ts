@@ -62,8 +62,7 @@ export const useCreateUser = () => {
         }
       }
     } catch (error) {
-      const err = error as any;
-      Alert.alert("", err.code);
+      alert(error);
       setIsLoading(false);
     }
   };
