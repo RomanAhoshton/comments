@@ -26,13 +26,16 @@ const TodoScreen = () => {
   const { todo } = useGetTodo();
   const { addTodo, todoText, setTodoText } = useAddTodo();
   const flatListRef = useRef<FlatList>(null);
+  const inputRef = useRef<TextInput>(null);
 
-  const scrollToBottom = () => {
-    flatListRef.current?.scrollToEnd({ animated: true });
+  const scrollToItem = (index: number) => {
+    flatListRef.current?.scrollToIndex({ index, animated: true });
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (todo.length > 0) {
+      scrollToItem(todo.length - 1);
+    }
   }, [todo]);
 
   const handleChangeText = (text: string) => {
@@ -92,16 +95,26 @@ const TodoScreen = () => {
           renderItem={({ item, index }) => (
             <TodoTask item={item} index={index} />
           )}
+          onScrollToIndexFailed={(info) => {
+            const wait = new Promise((resolve) => setTimeout(resolve, 500));
+            wait.then(() => {
+              flatListRef.current?.scrollToIndex({
+                index: info.index,
+                animated: true,
+              });
+            });
+          }}
         />
       </View>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={inputRef.current ? "padding" : "height"}
         style={styles.todoForm}
         keyboardVerticalOffset={100}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inputContainer}>
             <TextInput
+              ref={inputRef}
               style={[styles.todoInput]}
               multiline
               placeholder="Add Task..."
