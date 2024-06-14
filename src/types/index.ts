@@ -1,9 +1,5 @@
-export interface userFormValue {
+export type FormData = {
+  name: string;
   email: string;
   password: string;
-  name?: string;
-}
-export interface TodoType {
-  text: string;
-  id: string;
-}
+};

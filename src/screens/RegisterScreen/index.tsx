@@ -13,13 +13,13 @@ import { useNavigation } from '@react-navigation/native';
 import { ScreenNames, colors, fontSizes } from '../../helpers/index';
 import { styles } from './styles';
 import InputBase from '../../components/InputBase';
-import { useLogin } from '../../hooks/useLogin';
+import { useCreateUser } from '../../hooks/useCreateUser';
 import SButton from '../../components/SButton';
 import CText from '../../components/CText';
 import { FormData } from '../../types';
 import CLoader from '../../components/CLoader';
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
   const formRef = useRef<null | View>(null);
   const navigation = useNavigation();
 
@@ -30,17 +30,16 @@ const LoginScreen = () => {
     reset,
   } = useForm<FormData>({
     defaultValues: {
+      name: '',
       email: '',
       password: '',
     },
   });
 
-  const { Login, isLoading } = useLogin({ reset });
-
+  const { createUser, isLoading } = useCreateUser({ reset });
   const onSubmit = (data: FormData) => {
-    Login(data);
+    createUser(data);
   };
-
   return (
     <SafeAreaView style={styles.wrapper}>
       {isLoading && <CLoader />}
@@ -58,9 +57,29 @@ const LoginScreen = () => {
                   color: colors.blue,
                   fontSize: fontSizes.medium,
                 }}
-                text='Log in and add your first comment'
+                text='Create Account'
               />
             </View>
+
+            <Controller
+              control={control}
+              rules={{
+                required: 'This field is required',
+                minLength: {
+                  value: 8,
+                  message: 'Full Name must be at least 8 characters long',
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <InputBase
+                  errors={errors.name}
+                  label='Full Name'
+                  value={value}
+                  setValue={onChange}
+                />
+              )}
+              name='name'
+            />
 
             <Controller
               control={control}
@@ -104,13 +123,13 @@ const LoginScreen = () => {
             />
             <View style={styles.actions}>
               <SButton
-                text='Log in'
+                text='Create Account'
                 handleSubmit={handleSubmit(onSubmit)}
                 color={colors.blue}
               />
               <Pressable
                 onPress={() =>
-                  navigation.navigate(ScreenNames.RegisterScreen as never)
+                  navigation.navigate(ScreenNames.LoginScreen as never)
                 }
                 style={{ marginTop: 20 }}
               >
@@ -119,7 +138,7 @@ const LoginScreen = () => {
                     color: colors.blue,
                     fontSize: fontSizes.medium,
                   }}
-                  text='Back to Create Account'
+                  text='Already have account ? Log in'
                 />
               </Pressable>
             </View>
@@ -130,4 +149,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;

@@ -8,38 +8,24 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import { useLogOut } from "../../hooks/useLogOut";
-import { useEffect, useRef } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { colors } from "../../helpers";
-import { getAuth } from "firebase/auth";
-import { styles } from "./styles";
-import { useGetTodo } from "../../hooks/useGetTodo";
-import TodoTask from "../../components/TodoTask";
-import { useAddTodo } from "../../hooks/useAddTodo";
+} from 'react-native';
+import { useLogOut } from '../../hooks/useLogOut';
+import { useEffect, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { colors } from '../../helpers';
+import { getAuth } from 'firebase/auth';
+import { styles } from './styles';
 
-const TodoScreen = () => {
+const CommentsScreen = () => {
   const { LogOut } = useLogOut();
   const navigation = useNavigation();
   const currentUser = getAuth().currentUser;
-  const { todo } = useGetTodo();
-  const { addTodo, todoText, setTodoText } = useAddTodo();
+
   const flatListRef = useRef<FlatList>(null);
   const inputRef = useRef<TextInput>(null);
 
   const scrollToItem = (index: number) => {
     flatListRef.current?.scrollToIndex({ index, animated: true });
-  };
-
-  useEffect(() => {
-    if (todo.length > 0) {
-      scrollToItem(todo.length - 1);
-    }
-  }, [todo]);
-
-  const handleChangeText = (text: string) => {
-    setTodoText(text);
   };
 
   useEffect(() => {
@@ -51,13 +37,13 @@ const TodoScreen = () => {
       headerTitleStyle: {
         color: colors.blue,
         fontSize: 20,
-        fontWeight: "600",
+        fontWeight: '600',
       },
       headerBackTitleStyle: {
         color: colors.blue,
       },
       headerTintColor: colors.blue,
-      headerTitleAlign: "center",
+      headerTitleAlign: 'center',
 
       headerTitle: () => {
         return (
@@ -88,7 +74,7 @@ const TodoScreen = () => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.todoContainer}>
-        <FlatList
+        {/* <FlatList
           ref={flatListRef}
           data={todo}
           keyExtractor={(item) => item.id}
@@ -104,10 +90,10 @@ const TodoScreen = () => {
               });
             });
           }}
-        />
+        /> */}
       </View>
       <KeyboardAvoidingView
-        behavior={inputRef.current ? "padding" : "height"}
+        behavior={inputRef.current ? 'padding' : 'height'}
         style={styles.todoForm}
         keyboardVerticalOffset={100}
       >
@@ -117,16 +103,16 @@ const TodoScreen = () => {
               ref={inputRef}
               style={[styles.todoInput]}
               multiline
-              placeholder="Add Task..."
+              placeholder='Add Comment...'
               placeholderTextColor={colors.white}
-              value={todoText}
-              onChangeText={handleChangeText}
-              onEndEditing={({ nativeEvent }) =>
-                handleChangeText(nativeEvent.text)
-              }
+              // value={todoText}
+              // onChangeText={handleChangeText}
+              // onEndEditing={({ nativeEvent }) =>
+              //   handleChangeText(nativeEvent.text)
+              // }
             />
-            <Pressable onPress={addTodo}>
-              <Text style={styles.addTodoBtn}>ADD TASK</Text>
+            <Pressable onPress={() => console.log(1)}>
+              <Text style={styles.addTodoBtn}>ADD COMMENT</Text>
             </Pressable>
           </View>
         </TouchableWithoutFeedback>
@@ -135,4 +121,4 @@ const TodoScreen = () => {
   );
 };
 
-export default TodoScreen;
+export default CommentsScreen;

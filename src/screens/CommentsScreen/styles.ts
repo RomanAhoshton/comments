@@ -1,10 +1,10 @@
-import { StyleSheet } from "react-native";
-import Mertics, { colors } from "../../helpers";
+import { StyleSheet } from 'react-native';
+import Mertics, { colors } from '../../helpers';
 
 export const styles = StyleSheet.create({
   name: {
     fontSize: 25,
-    fontWeight: "600",
+    fontWeight: '600',
     color: colors.blue,
     marginBottom: 10,
     marginRight: 30,
@@ -12,23 +12,23 @@ export const styles = StyleSheet.create({
   avatar: {
     width: 40,
     borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    alignSelf: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    alignSelf: 'center',
     height: 40,
-    marginLeft: "auto",
+    marginLeft: 'auto',
   },
   textLogo: {
-    fontWeight: "500",
+    fontWeight: '500',
     fontSize: 20,
     color: colors.black,
   },
   logOutBtn: {
     color: colors.blue,
     fontSize: 16,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     borderWidth: 1,
   },
   wrapper: {
@@ -38,10 +38,10 @@ export const styles = StyleSheet.create({
   },
   todoForm: {
     backgroundColor: colors.black,
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderTopColor: colors.blue,
@@ -67,8 +67,8 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 15,
     marginTop: 15,
     maxHeight: 50,

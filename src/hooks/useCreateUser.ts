@@ -1,65 +1,53 @@
-import { useState } from "react";
-import { Alert } from "react-native";
-import { userFormValue } from "../types";
+import { FormData } from '../types';
 import {
   getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
-} from "firebase/auth";
-import { ScreenNames } from "../helpers";
-import { useNavigation } from "@react-navigation/native";
+} from 'firebase/auth';
+import { useState } from 'react';
+import { Alert } from 'react-native';
+import { useLogin } from './useLogin';
 
-export const useCreateUser = () => {
-  const navigation = useNavigation();
-  const [userValue, setUserValue] = useState<userFormValue>({
-    email: "",
-    password: "",
-    name: "",
-  });
+interface Props {
+  reset: () => void;
+}
+
+export const useCreateUser = ({ reset }: Props) => {
+  const { Login } = useLogin({ reset });
 
   const [isLoading, setIsLoading] = useState(false);
   const auth = getAuth();
 
-  const createUser = async () => {
+  const createUser = async (data: FormData) => {
     setIsLoading(true);
 
     try {
-      if (userValue?.name?.trim() === "") {
-        Alert.alert("", "Please enter the name");
-        throw new Error("Please enter the name");
-      }
-      if (userValue.email.trim() === "") {
-        Alert.alert("", "Please enter the email");
-        throw new Error("Please enter the email");
-      }
-      if (userValue.password.trim() === "") {
-        Alert.alert("", "Please enter the password");
-        throw new Error("Please enter the password");
-      }
-      const result = await createUserWithEmailAndPassword(
+      const response = await createUserWithEmailAndPassword(
         auth,
-        userValue.email,
-        userValue.password
+        data.email,
+        data.password
       );
-      const user = result.user;
+
+      const user = response.user;
       if (user) {
         await updateProfile(user, {
-          displayName: userValue.name,
+          displayName: data.name,
         });
 
-        if (user) {
-          Alert.alert("", "Your account has been created. Go to Login?", [
+        Alert.alert(
+          '',
+          'Your account has been created. Do you want to Login?',
+          [
             {
-              text: "Yes",
-              onPress: () =>
-                navigation.navigate(ScreenNames.LoginScreen as never),
-              style: "cancel",
+              text: 'Yes',
+              onPress: () => Login(data),
+              style: 'cancel',
             },
-            { text: "No", onPress: () => null },
-          ]);
-          setUserValue({ email: "", password: "", name: "" });
-          setIsLoading(false);
-        }
+            { text: 'No', onPress: () => null },
+          ]
+        );
+        setIsLoading(false);
+        reset();
       }
     } catch (error) {
       alert(error);
@@ -67,5 +55,5 @@ export const useCreateUser = () => {
     }
   };
 
-  return { userValue, setUserValue, createUser, isLoading };
+  return { createUser, isLoading };
 };
