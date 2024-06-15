@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
-import { ScreenNames, colors, fontSizes, space } from '../../helpers/index';
+import { ScreenNames, colors, fontSizes, space } from '../../helpers';
 import { styles } from './styles';
 import InputBase from '../../components/InputBase';
 import { useLogin } from '../../hooks/useLogin';

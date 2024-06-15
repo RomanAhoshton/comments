@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors, space } from '../../helpers/index';
+import { colors, space } from '../../helpers';
 
 export const styles = StyleSheet.create({
   wrapper: {

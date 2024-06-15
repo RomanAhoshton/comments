@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import Mertics, { colors } from '../../helpers';
+import { colors, Metrics } from '../../helpers';
 
 export const styles = StyleSheet.create({
   name: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     backgroundColor: colors.dark,
-    width: Mertics.width,
+    width: Metrics.width,
   },
   todoForm: {
     backgroundColor: colors.black,
@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
     color: colors.blue,
     fontSize: 16,
   },
-  todoContainer: {
+  commentContainer: {
     flex: 1,
     padding: 20,
   },

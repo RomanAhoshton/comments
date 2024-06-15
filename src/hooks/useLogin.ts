@@ -31,7 +31,7 @@ export const useLogin = ({ reset }: Props) => {
       if (user.uid) {
         setIsLoading(false);
         reset();
-        navigation.navigate(ScreenNames.TodoScreen as never);
+        navigation.navigate(ScreenNames.CommentsScreen as never);
       }
     } catch (error) {
       if (error) {

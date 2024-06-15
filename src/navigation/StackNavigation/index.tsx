@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getAuth } from 'firebase/auth';
 import TodoScreen from '../../screens/CommentsScreen/CommentsScreen';
-import RegisterScreen from '../../screens/RegisterScreen';
+import RegisterScreen from '../../screens/RegisterScreen/RegisterScreen';
 import LoginScreen from '../../screens/LoginScreen/LoginScreen';
 import { ScreenNames } from '../../helpers';
 
@@ -13,7 +13,7 @@ export default () => {
   return (
     <Stack.Navigator
       initialRouteName={
-        currentUser ? ScreenNames.TodoScreen : ScreenNames.RegisterScreen
+        currentUser ? ScreenNames.CommentsScreen : ScreenNames.RegisterScreen
       }
     >
       <Stack.Screen
@@ -27,7 +27,7 @@ export default () => {
         options={{ headerShown: false }}
       />
 
-      <Stack.Screen name={ScreenNames.TodoScreen} component={TodoScreen} />
+      <Stack.Screen name={ScreenNames.CommentsScreen} component={TodoScreen} />
     </Stack.Navigator>
   );
 };

@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import Metrics from '../../helpers';
-import { colors } from '../../helpers';
+import { colors, Metrics } from '../../helpers';
 
 export const styles = StyleSheet.create({
   user: {

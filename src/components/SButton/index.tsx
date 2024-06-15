@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
-import { colors, fontSizes } from '../../helpers/index';
+import { colors, fontSizes } from '../../helpers';
 
 interface ButtonProps {
   text: string;

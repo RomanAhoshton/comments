@@ -5,7 +5,6 @@ import {
   View,
   FlatList,
   KeyboardAvoidingView,
-  Platform,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
@@ -16,17 +15,24 @@ import { colors } from '../../helpers';
 import { getAuth } from 'firebase/auth';
 import { styles } from './styles';
 import Avatar from '../../components/Avatar';
+import { useComments } from '../../hooks/useComments';
+import Comment from '../../components/Comment';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const CommentsScreen = () => {
   const { LogOut } = useLogOut();
+  const { addComment, commentText, setCommentText, comments } = useComments();
   const navigation = useNavigation();
   const currentUser = getAuth().currentUser;
-
   const flatListRef = useRef<FlatList>(null);
   const inputRef = useRef<TextInput>(null);
-
   const scrollToItem = (index: number) => {
     flatListRef.current?.scrollToIndex({ index, animated: true });
+  };
+
+  const handleAddComment = async (text: string) => {
+    await addComment(text);
+    scrollToItem(0);
   };
 
   useEffect(() => {
@@ -77,14 +83,13 @@ const CommentsScreen = () => {
 
   return (
     <View style={styles.wrapper}>
-      <View style={styles.todoContainer}>
-        {/* <FlatList
+      <View style={styles.commentContainer}>
+        <FlatList
           ref={flatListRef}
-          data={todo}
+          data={comments}
           keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => (
-            <TodoTask item={item} index={index} />
-          )}
+          renderItem={({ item }) => <Comment comment={item} />}
+          inverted
           onScrollToIndexFailed={(info) => {
             const wait = new Promise((resolve) => setTimeout(resolve, 500));
             wait.then(() => {
@@ -94,7 +99,7 @@ const CommentsScreen = () => {
               });
             });
           }}
-        /> */}
+        />
       </View>
       <KeyboardAvoidingView
         behavior={inputRef.current ? 'padding' : 'height'}
@@ -107,16 +112,20 @@ const CommentsScreen = () => {
               ref={inputRef}
               style={[styles.todoInput]}
               multiline
-              placeholder='Add Comment...'
+              placeholder='Type Comment...'
               placeholderTextColor={colors.white}
-              // value={todoText}
-              // onChangeText={handleChangeText}
-              // onEndEditing={({ nativeEvent }) =>
-              //   handleChangeText(nativeEvent.text)
-              // }
+              value={commentText}
+              onChangeText={setCommentText}
+              onEndEditing={({ nativeEvent }) =>
+                setCommentText(nativeEvent.text)
+              }
             />
-            <Pressable onPress={() => console.log(1)}>
-              <Text style={styles.addTodoBtn}>ADD COMMENT</Text>
+            <Pressable onPress={() => handleAddComment(commentText)}>
+              <MaterialCommunityIcons
+                name='send-circle'
+                size={45}
+                color={colors.blue}
+              />
             </Pressable>
           </View>
         </TouchableWithoutFeedback>

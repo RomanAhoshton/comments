@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Animated, StyleSheet } from 'react-native';
-import { colors, fontSizes } from '../../helpers/index';
+import { colors, fontSizes } from '../../helpers';
 
 interface InputProps {
   label: string;
