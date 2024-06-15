@@ -5,6 +5,7 @@ interface TextProps {
   styles: {
     color: string;
     fontSize: number;
+    marginBottom?: number;
   };
   text: string;
 }

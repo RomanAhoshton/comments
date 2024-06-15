@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from '../../helpers';
 import { getAuth } from 'firebase/auth';
 import { styles } from './styles';
+import Avatar from '../../components/Avatar';
 
 const CommentsScreen = () => {
   const { LogOut } = useLogOut();
@@ -34,6 +35,7 @@ const CommentsScreen = () => {
         backgroundColor: colors.black,
         padding: 10,
       },
+
       headerTitleStyle: {
         color: colors.blue,
         fontSize: 20,
@@ -44,8 +46,10 @@ const CommentsScreen = () => {
       },
       headerTintColor: colors.blue,
       headerTitleAlign: 'center',
-
       headerTitle: () => {
+        return '';
+      },
+      headerRight: () => {
         return (
           <Pressable
             onPress={LogOut}
@@ -65,7 +69,7 @@ const CommentsScreen = () => {
 
       // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
-        return <Text style={styles.name}>{currentUser?.displayName}</Text>;
+        return <Avatar user={currentUser} />;
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

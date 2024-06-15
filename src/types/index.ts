@@ -3,3 +3,10 @@ export type FormData = {
   email: string;
   password: string;
 };
+
+export interface User {
+  name?: string | null;
+  photo?: string | null;
+  email?: string | null;
+  id?: string;
+}

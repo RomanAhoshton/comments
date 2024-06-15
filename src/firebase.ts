@@ -1,16 +1,17 @@
-import { initializeApp, getApp } from "firebase/app";
-import { getFirestore } from "@firebase/firestore";
-import { initializeAuth, getAuth } from "firebase/auth";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import * as firebaseAuth from "firebase/auth";
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { initializeAuth, getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import * as firebaseAuth from 'firebase/auth';
 
-const FIREBASE_API_KEY = "AIzaSyBTqQ_qundFGPOQt_YinVPDfRjlnqN9qR8";
-const FIREBASE_AUTH_DOMAIN = "todolistapp-908f6.firebaseapp.com";
-const FIREBASE_PROJECT_ID = "todolistapp-908f6";
-const FIREBASE_STORAGE_BUCKET = "todolistapp-908f6.appspot.com";
-const FIREBASE_MESSAGING_SENDER_ID = "981434960858";
-const FIREBASE_APP_ID = "1:981434960858:web:4ad752ce197b9ae9eecee3";
-const FIREBASE_MEASUREMENT_ID = "G-Y6PM0VFX74";
+const FIREBASE_API_KEY = 'AIzaSyC87SxOa9uhEQIetr_RLtlmyRu-kaIrZmo';
+const FIREBASE_AUTH_DOMAIN = 'comments-app-5039f.firebaseapp.com';
+const FIREBASE_PROJECT_ID = 'comments-app-5039f';
+const FIREBASE_STORAGE_BUCKET = 'comments-app-5039f.appspot.com';
+const FIREBASE_MESSAGING_SENDER_ID = '749511187824';
+const FIREBASE_APP_ID = '1:749511187824:web:b4136187564c70447d83b5';
+const FIREBASE_MEASUREMENT_ID = 'G-ZF0G85PQ1D';
 
 export const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -21,13 +22,26 @@ export const firebaseConfig = {
   appId: FIREBASE_APP_ID,
   measurementId: FIREBASE_MEASUREMENT_ID,
 };
-const app = initializeApp(firebaseConfig);
+
+let app;
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
 
 export const DB = getFirestore(app);
+export const storage = getStorage(app);
+
 const reactNativePersistence = (firebaseAuth as any).getReactNativePersistence;
 
-const auth = initializeAuth(app, {
-  persistence: reactNativePersistence(ReactNativeAsyncStorage),
-});
+let auth;
+if (!getApps().length) {
+  auth = initializeAuth(app, {
+    persistence: reactNativePersistence(ReactNativeAsyncStorage),
+  });
+} else {
+  auth = getAuth();
+}
 
-export { app, auth, getApp, getAuth };
+export { app, auth, getAuth };

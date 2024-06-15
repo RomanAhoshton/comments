@@ -7,6 +7,7 @@ import {
   Keyboard,
   Pressable,
   Text,
+  ScrollView,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
@@ -20,7 +21,7 @@ import { FormData } from '../../types';
 import CLoader from '../../components/CLoader';
 
 const RegisterScreen = () => {
-  const formRef = useRef<null | View>(null);
+  const formRef = useRef<null | ScrollView>(null);
   const navigation = useNavigation();
 
   const {
@@ -44,12 +45,12 @@ const RegisterScreen = () => {
     <SafeAreaView style={styles.wrapper}>
       {isLoading && <CLoader />}
       <KeyboardAvoidingView
-        behavior={formRef.current ? 'padding' : 'height'}
+        behavior='padding'
         keyboardVerticalOffset={100}
         style={styles.keyboardAvoiding}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container} ref={formRef}>
+          <ScrollView contentContainerStyle={styles.container} ref={formRef}>
             <View style={styles.textBlock}>
               <Text style={styles.subtitle}> Comment App</Text>
               <CText
@@ -142,7 +143,7 @@ const RegisterScreen = () => {
                 />
               </Pressable>
             </View>
-          </View>
+          </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>

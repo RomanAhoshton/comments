@@ -33,7 +33,7 @@ export const useCreateUser = ({ reset }: Props) => {
         await updateProfile(user, {
           displayName: data.name,
         });
-
+        console.log('user is created', user);
         Alert.alert(
           '',
           'Your account has been created. Do you want to Login?',

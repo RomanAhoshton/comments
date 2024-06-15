@@ -3,6 +3,7 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   TouchableWithoutFeedback,
+  ScrollView,
   View,
   Keyboard,
   Pressable,
@@ -10,7 +11,7 @@ import {
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
-import { ScreenNames, colors, fontSizes } from '../../helpers/index';
+import { ScreenNames, colors, fontSizes, space } from '../../helpers/index';
 import { styles } from './styles';
 import InputBase from '../../components/InputBase';
 import { useLogin } from '../../hooks/useLogin';
@@ -20,7 +21,7 @@ import { FormData } from '../../types';
 import CLoader from '../../components/CLoader';
 
 const LoginScreen = () => {
-  const formRef = useRef<null | View>(null);
+  const formRef = useRef<null | ScrollView>(null);
   const navigation = useNavigation();
 
   const {
@@ -45,18 +46,19 @@ const LoginScreen = () => {
     <SafeAreaView style={styles.wrapper}>
       {isLoading && <CLoader />}
       <KeyboardAvoidingView
-        behavior={formRef.current ? 'padding' : 'height'}
+        behavior='padding'
         keyboardVerticalOffset={100}
         style={styles.keyboardAvoiding}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container} ref={formRef}>
+          <ScrollView contentContainerStyle={styles.container} ref={formRef}>
             <View style={styles.textBlock}>
               <Text style={styles.subtitle}> Comment App</Text>
               <CText
                 styles={{
                   color: colors.blue,
                   fontSize: fontSizes.medium,
+                  marginBottom: space.medium,
                 }}
                 text='Log in and add your first comment'
               />
@@ -123,7 +125,7 @@ const LoginScreen = () => {
                 />
               </Pressable>
             </View>
-          </View>
+          </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
