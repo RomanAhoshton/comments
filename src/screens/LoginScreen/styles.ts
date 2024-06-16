@@ -4,7 +4,6 @@ import { colors, space } from '../../helpers';
 export const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: colors.black,
   },
 
   container: {

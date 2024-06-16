@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { colors, Metrics } from '../../helpers';
+import { colors } from '../../helpers';
 
 export const styles = StyleSheet.create({
   user: {
@@ -30,7 +30,6 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 2,
     borderColor: colors.blue,
-    backgroundColor: colors.dark,
   },
   textLogo: {
     fontWeight: '400',

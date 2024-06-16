@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 import { colors, space } from '../../helpers';
+import { useTheme } from '../../hooks/useTheme';
 
 export const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: colors.black,
   },
 
   container: {

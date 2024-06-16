@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../../hooks/useTheme';
 import { ScreenNames, colors, fontSizes } from '../../helpers';
 import { styles } from './styles';
 import InputBase from '../../components/InputBase';
@@ -21,6 +22,8 @@ import { FormData } from '../../types';
 import CLoader from '../../components/CLoader';
 
 const RegisterScreen = () => {
+  const { theme } = useTheme();
+
   const formRef = useRef<null | ScrollView>(null);
   const navigation = useNavigation();
 
@@ -42,7 +45,12 @@ const RegisterScreen = () => {
     createUser(data);
   };
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <SafeAreaView
+      style={[
+        styles.wrapper,
+        { backgroundColor: theme === 'dark' ? colors.black : colors.white },
+      ]}
+    >
       {isLoading && <CLoader />}
       <KeyboardAvoidingView
         behavior='padding'

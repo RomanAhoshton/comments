@@ -79,5 +79,5 @@ export const useAvatar = () => {
     }
   };
 
-  return { pickImage, image };
+  return { pickImage, image, loading };
 };

@@ -1,9 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getAuth } from 'firebase/auth';
-import TodoScreen from '../../screens/CommentsScreen/CommentsScreen';
+import CommentsScreen from '../../screens/CommentsScreen/CommentsScreen';
 import RegisterScreen from '../../screens/RegisterScreen/RegisterScreen';
 import LoginScreen from '../../screens/LoginScreen/LoginScreen';
 import { ScreenNames } from '../../helpers';
+import Header from '../../components/Header';
 
 export default () => {
   const Stack = createNativeStackNavigator();
@@ -27,7 +28,10 @@ export default () => {
         options={{ headerShown: false }}
       />
 
-      <Stack.Screen name={ScreenNames.CommentsScreen} component={TodoScreen} />
+      <Stack.Screen
+        name={ScreenNames.CommentsScreen}
+        component={CommentsScreen}
+      />
     </Stack.Navigator>
   );
 };

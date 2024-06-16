@@ -1,40 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
-import { Comment } from '../../types';
-import { Metrics, colors } from '../../helpers';
-import Avatar from '../Avatar';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState, memo, useCallback } from 'react';
+import { View, Text, Image, Pressable, FlatList } from 'react-native';
+import { Comment, responses } from '../../types';
+import { colors } from '../../helpers';
+import { MaterialIcons } from '@expo/vector-icons';
+import { styles } from './styles';
+import { useFormattedDate } from '../../hooks/useFormattedDate';
+import AnswerComment from '../AnswerComment';
+import { useTheme } from '../../hooks/useTheme';
 
 interface CommentProps {
   comment: Comment;
+  setAnswerTo: (arg: any) => void;
 }
 
-const CommentComponent: React.FC<CommentProps> = ({ comment }) => {
-  const formattedDateTime = (timestamp: any) => {
-    if (!timestamp || !timestamp.seconds) {
-      return 'Invalid Date';
-    }
+interface ItemProp {
+  item: responses;
+}
 
-    const secondsInMillis = timestamp.seconds * 1000;
-    const nanosecondsInMillis = timestamp.nanoseconds / 1e6;
-    const totalMilliseconds = secondsInMillis + nanosecondsInMillis;
+export default memo(({ comment, setAnswerTo }: CommentProps) => {
+  const { theme } = useTheme();
+  const [open, setOpen] = useState(false);
 
-    const dateObject = new Date(totalMilliseconds);
-
-    const day = dateObject.getDate().toString().padStart(2, '0');
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-    const year = dateObject.getFullYear();
-
-    const hours = dateObject.getHours().toString().padStart(2, '0');
-    const minutes = dateObject.getMinutes().toString().padStart(2, '0');
-
-    return `${day}.${month}.${year} ${hours}:${minutes}`;
+  const handleAnswer = (comment: Comment) => {
+    setAnswerTo({ author: comment.author, id: comment.id });
   };
 
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
+  const { formattedDateTime } = useFormattedDate();
+
+  const renderItem = useCallback(
+    ({ item }: ItemProp) => <AnswerComment answer={item} />,
+    [setAnswerTo]
+  );
+
   return (
-    <View style={styles.commentContainer}>
+    <View
+      style={[
+        styles.commentContainer,
+        { backgroundColor: theme === 'dark' ? colors.dark : colors.white },
+      ]}
+    >
       <View style={styles.author}>
         {comment.avatar ? (
           <Image
@@ -44,7 +52,14 @@ const CommentComponent: React.FC<CommentProps> = ({ comment }) => {
             }}
           />
         ) : (
-          <View style={[styles.noImageAvatar]}>
+          <View
+            style={[
+              styles.noImageAvatar,
+              {
+                backgroundColor: theme === 'dark' ? colors.dark : colors.white,
+              },
+            ]}
+          >
             <Text style={styles.textLogo}>{comment.author?.charAt(0)}</Text>
           </View>
         )}
@@ -54,81 +69,30 @@ const CommentComponent: React.FC<CommentProps> = ({ comment }) => {
             {formattedDateTime(comment.timestamp)}
           </Text>
         </View>
+        {comment.responses.length > 0 && (
+          <Pressable style={styles.arrow} onPress={() => handleOpen()}>
+            <MaterialIcons
+              name={open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
+              size={40}
+              color={colors.blue}
+            />
+          </Pressable>
+        )}
       </View>
       <View style={styles.textAnswer}>
         <Text style={styles.textMessage}>{comment.text}</Text>
-        <Pressable>
+        <Pressable onPress={() => handleAnswer(comment)}>
           <Text style={styles.answer}>Answer</Text>
         </Pressable>
       </View>
+
+      {comment.responses.length > 0 && !open ? (
+        <FlatList
+          data={comment.responses}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+        />
+      ) : null}
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  commentContainer: {
-    backgroundColor: colors.black,
-    borderColor: colors.blue,
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 10,
-    borderWidth: 1,
-  },
-  author: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  noImageAvatar: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.dark,
-    borderWidth: 2,
-    borderColor: colors.blue,
-  },
-  textLogo: {
-    fontWeight: '400',
-    fontSize: 25,
-    color: colors.blue,
-  },
-  authorInfo: {
-    flex: 1,
-  },
-  authorName: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: colors.blue,
-  },
-  timestamp: {
-    color: colors.grey,
-    fontSize: 12,
-    marginTop: 10,
-  },
-  textMessage: {
-    marginTop: 10,
-    fontSize: 14,
-    color: colors.blue,
-    width: '80%',
-  },
-
-  textAnswer: {
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-
-  answer: {
-    color: colors.grey,
-  },
 });
-
-export default CommentComponent;

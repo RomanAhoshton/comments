@@ -4,7 +4,6 @@ import { initializeAuth, getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import * as firebaseAuth from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
 
 const FIREBASE_API_KEY = 'AIzaSyC87SxOa9uhEQIetr_RLtlmyRu-kaIrZmo';
 const FIREBASE_AUTH_DOMAIN = 'comments-app-5039f.firebaseapp.com';

@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native';
+import { useTheme } from './hooks/useTheme';
 
 const { width, height } = Dimensions.get('window');
 

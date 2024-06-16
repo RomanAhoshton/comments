@@ -7,9 +7,10 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from 'react-native';
 import { useLogOut } from '../../hooks/useLogOut';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../../helpers';
 import { getAuth } from 'firebase/auth';
@@ -18,78 +19,83 @@ import Avatar from '../../components/Avatar';
 import { useComments } from '../../hooks/useComments';
 import Comment from '../../components/Comment';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import CLoader from '../../components/CLoader';
+import { useTheme } from '../../hooks/useTheme';
+import { Comment as CommentType } from '../../types';
+import Header from '../../components/Header';
+
+interface ItemProp {
+  item: CommentType;
+}
 
 const CommentsScreen = () => {
+  const { theme } = useTheme();
   const { LogOut } = useLogOut();
-  const { addComment, commentText, setCommentText, comments } = useComments();
+  const [open, setOpen] = useState(false);
+
+  const [answerTo, setAnswerTo] = useState({
+    author: '',
+    id: '',
+  });
+
+  const { addComment, commentText, setCommentText, comments, Answer, loading } =
+    useComments({ setAnswerTo });
+
   const navigation = useNavigation();
   const currentUser = getAuth().currentUser;
   const flatListRef = useRef<FlatList>(null);
   const inputRef = useRef<TextInput>(null);
-  const scrollToItem = (index: number) => {
-    flatListRef.current?.scrollToIndex({ index, animated: true });
-  };
 
   const handleAddComment = async (text: string) => {
     await addComment(text);
     scrollToItem(0);
+
+    if (answerTo.author !== '') {
+      setAnswerTo({ author: '', id: '' });
+    }
   };
+
+  const scrollToItem = (index: number) => {
+    flatListRef.current?.scrollToIndex({ index, animated: true });
+  };
+
+  const renderItem = useCallback(
+    ({ item }: ItemProp) => (
+      <Comment comment={item} setAnswerTo={setAnswerTo} />
+    ),
+    [setAnswerTo]
+  );
+
+  const handleAnswerComment = async (text: string) => {
+    await Answer(text, answerTo);
+    setOpen(true);
+  };
+
+  const placeholder =
+    answerTo.author !== ''
+      ? `Type your answer to ${answerTo.author}`
+      : 'Type Comment...';
 
   useEffect(() => {
     navigation.setOptions({
-      headerStyle: {
-        backgroundColor: colors.black,
-        padding: 10,
-      },
-
-      headerTitleStyle: {
-        color: colors.blue,
-        fontSize: 20,
-        fontWeight: '600',
-      },
-      headerBackTitleStyle: {
-        color: colors.blue,
-      },
-      headerTintColor: colors.blue,
-      headerTitleAlign: 'center',
-      headerTitle: () => {
-        return '';
-      },
-      headerRight: () => {
-        return (
-          <Pressable
-            onPress={LogOut}
-            style={{
-              borderWidth: 2,
-              padding: 5,
-              borderColor: colors.blue,
-              borderRadius: 15,
-              marginBottom: 10,
-              marginLeft: 20,
-            }}
-          >
-            <Text style={styles.logOutBtn}>Log out</Text>
-          </Pressable>
-        );
-      },
-
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerLeft: () => {
-        return <Avatar user={currentUser} />;
-      },
+      header: () => <Header />,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <View
+      style={[
+        styles.wrapper,
+        { backgroundColor: theme === 'dark' ? colors.dark : colors.white },
+      ]}
+    >
       <View style={styles.commentContainer}>
+        {loading && <CLoader />}
         <FlatList
           ref={flatListRef}
           data={comments}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <Comment comment={item} />}
-          inverted
+          renderItem={renderItem}
           onScrollToIndexFailed={(info) => {
             const wait = new Promise((resolve) => setTimeout(resolve, 500));
             wait.then(() => {
@@ -103,30 +109,52 @@ const CommentsScreen = () => {
       </View>
       <KeyboardAvoidingView
         behavior={inputRef.current ? 'padding' : 'height'}
-        style={styles.todoForm}
+        style={[
+          styles.commentForm,
+          { backgroundColor: theme === 'dark' ? colors.black : colors.white },
+        ]}
         keyboardVerticalOffset={100}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inputContainer}>
             <TextInput
               ref={inputRef}
-              style={[styles.todoInput]}
+              style={[
+                styles.commentInput,
+                {
+                  backgroundColor:
+                    theme === 'dark' ? colors.dark : colors.white,
+                },
+              ]}
               multiline
-              placeholder='Type Comment...'
-              placeholderTextColor={colors.white}
+              placeholder={placeholder}
+              placeholderTextColor={
+                placeholder === 'Type Comment...' ? colors.grey : colors.blue
+              }
               value={commentText}
               onChangeText={setCommentText}
               onEndEditing={({ nativeEvent }) =>
                 setCommentText(nativeEvent.text)
               }
             />
-            <Pressable onPress={() => handleAddComment(commentText)}>
-              <MaterialCommunityIcons
-                name='send-circle'
-                size={45}
-                color={colors.blue}
-              />
-            </Pressable>
+
+            {placeholder === 'Type Comment...' ? (
+              <Pressable onPress={() => handleAddComment(commentText)}>
+                <MaterialCommunityIcons
+                  name='send-circle'
+                  size={45}
+                  color={colors.blue}
+                />
+              </Pressable>
+            ) : (
+              <Pressable onPress={() => handleAnswerComment(commentText)}>
+                <MaterialCommunityIcons
+                  name='send-circle'
+                  size={45}
+                  color={colors.blue}
+                />
+              </Pressable>
+            )}
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

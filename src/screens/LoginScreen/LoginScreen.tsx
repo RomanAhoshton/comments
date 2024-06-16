@@ -19,8 +19,11 @@ import SButton from '../../components/SButton';
 import CText from '../../components/CText';
 import { FormData } from '../../types';
 import CLoader from '../../components/CLoader';
+import { useTheme } from '../../hooks/useTheme';
 
 const LoginScreen = () => {
+  const { theme } = useTheme();
+
   const formRef = useRef<null | ScrollView>(null);
   const navigation = useNavigation();
 
@@ -43,7 +46,12 @@ const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <SafeAreaView
+      style={[
+        styles.wrapper,
+        { backgroundColor: theme === 'dark' ? colors.black : colors.white },
+      ]}
+    >
       {isLoading && <CLoader />}
       <KeyboardAvoidingView
         behavior='padding'

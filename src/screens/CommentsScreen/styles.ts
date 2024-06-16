@@ -19,25 +19,12 @@ export const styles = StyleSheet.create({
     height: 40,
     marginLeft: 'auto',
   },
-  textLogo: {
-    fontWeight: '500',
-    fontSize: 20,
-    color: colors.black,
-  },
-  logOutBtn: {
-    color: colors.blue,
-    fontSize: 16,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    borderWidth: 1,
-  },
+
   wrapper: {
     flex: 1,
-    backgroundColor: colors.dark,
     width: Metrics.width,
   },
-  todoForm: {
-    backgroundColor: colors.black,
+  commentForm: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
@@ -47,21 +34,17 @@ export const styles = StyleSheet.create({
     borderTopColor: colors.blue,
     borderTopWidth: 1,
   },
-  todoInput: {
+  commentInput: {
     flex: 1,
     borderWidth: 1,
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 10,
-    backgroundColor: colors.dark,
     borderColor: colors.blue,
-    color: colors.white,
+    color: colors.grey,
     marginRight: 10,
   },
-  addTodoBtn: {
-    color: colors.blue,
-    fontSize: 16,
-  },
+
   commentContainer: {
     flex: 1,
     padding: 20,
