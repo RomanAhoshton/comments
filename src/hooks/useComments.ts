@@ -63,7 +63,7 @@ export const useComments = ({ setAnswerTo }: AnswerToProps) => {
         setCommentText('');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -93,7 +93,7 @@ export const useComments = ({ setAnswerTo }: AnswerToProps) => {
         setCommentText('');
         setAnswerTo({ author: '', id: '' });
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };

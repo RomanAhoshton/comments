@@ -63,7 +63,6 @@ export const useAvatar = () => {
 
         if (uploadResult) {
           const downloadURL = await getDownloadURL(storageRef);
-          console.log('Download URL:', downloadURL);
 
           await updateProfile(currentUser, { photoURL: downloadURL });
 

@@ -43,13 +43,12 @@ export const useShareImage = () => {
 
         if (uploadResult) {
           const downloadURL = await getDownloadURL(storageRef);
-          console.log('Download URL:', downloadURL);
 
           await addImageToFirestore(downloadURL);
         }
       }
     } catch (error) {
-      console.error('Error sharring image:', error);
+      console.error(error);
     }
   };
 
@@ -67,7 +66,7 @@ export const useShareImage = () => {
       await addDoc(commentsCollection, commentData);
     } catch (error) {
       setLoadingImage(false);
-      console.log('Error adding image to Firestore:', error);
+      console.error(error);
     }
   };
 
