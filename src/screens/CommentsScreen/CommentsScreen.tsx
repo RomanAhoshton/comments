@@ -1,21 +1,17 @@
 import {
   Pressable,
-  Text,
   TextInput,
   View,
   FlatList,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Platform,
 } from 'react-native';
-import { useLogOut } from '../../hooks/useLogOut';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../../helpers';
-import { getAuth } from 'firebase/auth';
 import { styles } from './styles';
-import Avatar from '../../components/Avatar';
 import { useComments } from '../../hooks/useComments';
 import Comment from '../../components/Comment';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -23,6 +19,7 @@ import CLoader from '../../components/CLoader';
 import { useTheme } from '../../hooks/useTheme';
 import { Comment as CommentType } from '../../types';
 import Header from '../../components/Header';
+import { useShareImage } from '../../hooks/useShareImage';
 
 interface ItemProp {
   item: CommentType;
@@ -30,8 +27,8 @@ interface ItemProp {
 
 const CommentsScreen = () => {
   const { theme } = useTheme();
-  const { LogOut } = useLogOut();
-  const [open, setOpen] = useState(false);
+
+  const { pickImage } = useShareImage();
 
   const [answerTo, setAnswerTo] = useState({
     author: '',
@@ -41,8 +38,10 @@ const CommentsScreen = () => {
   const { addComment, commentText, setCommentText, comments, Answer, loading } =
     useComments({ setAnswerTo });
 
+  const { loadingImage } = useShareImage();
+
   const navigation = useNavigation();
-  const currentUser = getAuth().currentUser;
+
   const flatListRef = useRef<FlatList>(null);
   const inputRef = useRef<TextInput>(null);
 
@@ -68,7 +67,6 @@ const CommentsScreen = () => {
 
   const handleAnswerComment = async (text: string) => {
     await Answer(text, answerTo);
-    setOpen(true);
   };
 
   const placeholder =
@@ -91,6 +89,8 @@ const CommentsScreen = () => {
     >
       <View style={styles.commentContainer}>
         {loading && <CLoader />}
+        {loadingImage && <CLoader />}
+
         <FlatList
           ref={flatListRef}
           data={comments}
@@ -138,6 +138,13 @@ const CommentsScreen = () => {
               }
             />
 
+            <Pressable onPress={() => pickImage()}>
+              <MaterialIcons
+                name='add-photo-alternate'
+                size={45}
+                color={colors.blue}
+              />
+            </Pressable>
             {placeholder === 'Type Comment...' ? (
               <Pressable onPress={() => handleAddComment(commentText)}>
                 <MaterialCommunityIcons

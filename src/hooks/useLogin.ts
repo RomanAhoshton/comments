@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { ScreenNames } from '../helpers';
 import { FormData } from '../types';

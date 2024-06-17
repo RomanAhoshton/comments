@@ -12,7 +12,8 @@ export interface User {
 }
 
 export type Comment = {
-  text: string;
+  text?: string;
+  image?: string;
   author: string;
   avatar: string;
   timestamp: string;
@@ -21,9 +22,10 @@ export type Comment = {
 };
 
 export interface responses {
-  text: string;
+  text?: string;
   author: string;
   avatar: string;
   timestamp: string;
   id: string;
+  image?: string;
 }

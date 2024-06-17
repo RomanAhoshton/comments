@@ -80,7 +80,16 @@ export default memo(({ comment, setAnswerTo }: CommentProps) => {
         )}
       </View>
       <View style={styles.textAnswer}>
-        <Text style={styles.textMessage}>{comment.text}</Text>
+        {comment.text && <Text style={styles.textMessage}>{comment.text}</Text>}
+        {comment.image && (
+          <Image
+            style={{ width: 100, height: 100 }}
+            source={{
+              uri: comment?.image,
+            }}
+          ></Image>
+        )}
+
         <Pressable onPress={() => handleAnswer(comment)}>
           <Text style={styles.answer}>Answer</Text>
         </Pressable>
