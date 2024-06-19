@@ -8,6 +8,7 @@ import {
   Pressable,
   Text,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
@@ -53,8 +54,8 @@ const RegisterScreen = () => {
     >
       {isLoading && <CLoader />}
       <KeyboardAvoidingView
-        behavior='padding'
-        keyboardVerticalOffset={100}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
         style={styles.keyboardAvoiding}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

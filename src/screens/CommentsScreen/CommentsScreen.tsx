@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -108,12 +109,12 @@ const CommentsScreen = () => {
         />
       </View>
       <KeyboardAvoidingView
-        behavior={inputRef.current ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
         style={[
           styles.commentForm,
           { backgroundColor: theme === 'dark' ? colors.black : colors.white },
         ]}
-        keyboardVerticalOffset={100}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inputContainer}>
